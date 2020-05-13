@@ -3,7 +3,7 @@ package com.lab.catalogue.domain;
 import java.util.List;
 import java.util.UUID;
 
-public class SubMenu {
+public class SubCatalogue {
 
     private String id;
 
@@ -13,7 +13,11 @@ public class SubMenu {
 
     private List<Item> items;
 
-    public SubMenu() {
+    private long price;
+
+    private boolean active;
+
+    public SubCatalogue() {
         id = UUID.randomUUID().toString();
     }
 
@@ -47,5 +51,21 @@ public class SubMenu {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

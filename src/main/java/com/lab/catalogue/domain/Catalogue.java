@@ -10,7 +10,7 @@ public class Catalogue {
 
     private String version;
 
-    private List<SubMenu> menus;
+    private List<SubCatalogue> menus;
 
     private String description;
 
@@ -44,11 +44,11 @@ public class Catalogue {
         this.version = version;
     }
 
-    public List<SubMenu> getMenus() {
+    public List<SubCatalogue> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<SubMenu> menus) {
+    public void setMenus(List<SubCatalogue> menus) {
         this.menus = menus;
     }
 
@@ -58,5 +58,25 @@ public class Catalogue {
 
     public void setCurrent(boolean current) {
         this.current = current;
+    }
+
+    public Catalogue desactivate() {
+        this.setCurrent(false);
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Catalogue catalogue = (Catalogue) o;
+
+        return id.equals(catalogue.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

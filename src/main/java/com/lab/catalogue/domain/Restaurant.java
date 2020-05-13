@@ -4,7 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Document
 public class Restaurant {
@@ -59,8 +61,56 @@ public class Restaurant {
         this.image = image;
     }
 
-    public Restaurant restaurantWithId() {
-        this.id = UUID.randomUUID().toString();
+    public Restaurant() {
+        id = UUID.randomUUID().toString();
+    }
+
+    public Restaurant addCatalogue(Catalogue catalogue) {
+        if (catalogue.isCurrent()) {
+            desactivateCurrentCatalogue();
+        }
+        this.catalogues.add(catalogue);
         return this;
+    }
+
+    public Restaurant activateCatalogue(String id) {
+        desactivateCurrentCatalogue();
+        this.catalogues.stream()
+                .filter(catalogue -> catalogue.getId().equals(id))
+                .findFirst()
+                .get()
+                .setCurrent(true);
+        return this;
+    }
+
+    public void desactivateCurrentCatalogue() {
+        this.catalogues.stream().filter(Catalogue::isCurrent).findFirst().map(Catalogue::desactivate);
+    }
+
+    public void deleteCatalogue(String catId) {
+        List<Catalogue> catalogues = this.getCatalogues()
+                .stream()
+                .filter(catalogue -> !catalogue.getId().equals(catId))
+                .collect(Collectors.toList());
+        this.setCatalogues(catalogues);
+    }
+
+    public void override(Catalogue catalogue) {
+        this.getCatalogues().remove(catalogue);
+        this.addCatalogue(catalogue);
+    }
+
+    public Optional<Catalogue> currentCatalogue() {
+        return this.getCatalogues()
+                .stream()
+                .filter(Catalogue::isCurrent)
+                .findFirst();
+    }
+
+    public Optional<Catalogue> catalogue(String catId) {
+        return this.getCatalogues()
+                .stream()
+                .filter(catalogue -> catalogue.getId().equals(catId))
+                .findFirst();
     }
 }
