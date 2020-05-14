@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/v1/restaurant")
-public class AdminRestaurantResource {
+public class
+
+AdminRestaurantResource {
 
     @Autowired
     private RestaurantService restaurantService;
@@ -17,7 +18,14 @@ public class AdminRestaurantResource {
     @Autowired
     private CatalogueService catalogueService;
 
-    @PostMapping
+
+    @GetMapping("/version")
+    public String version() {
+        return "1.0-SNAPSHOT";
+    }
+
+
+    @PostMapping("/admin/v1/restaurant")
     @ResponseStatus(code = HttpStatus.CREATED)
     public Restaurant save(@RequestBody Restaurant restaurant) {
         return restaurantService.save(restaurant);
