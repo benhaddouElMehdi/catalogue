@@ -1,12 +1,18 @@
 package com.lab.catalogue.domain;
 
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 import java.util.UUID;
 
+@Document
 public class Catalogue {
-
+    @Id
     private String id;
+
+    private String restaurantId;
 
     private String version;
 
@@ -78,5 +84,13 @@ public class Catalogue {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }

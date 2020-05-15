@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/public/v1/restaurant/{restId}/catalogue")
+@RequestMapping("/public/v1")
 public class PublicCatalogueResource {
     @Autowired
-    private CatalogueService service;
+    private CatalogueService catalogueService;
 
-    @GetMapping("/current")
-    public Catalogue currentCatalogue(@PathVariable String restId) {
-        return service.current(restId);
+    @GetMapping("/restaurant/{restId}/catalogue/current")
+    public Catalogue current(@PathVariable String restId) {
+        return catalogueService.current(restId);
     }
 }

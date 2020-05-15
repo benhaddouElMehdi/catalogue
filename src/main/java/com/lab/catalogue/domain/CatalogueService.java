@@ -1,5 +1,6 @@
 package com.lab.catalogue.domain;
 
+import com.lab.catalogue.repository.CatalogueRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,56 +8,37 @@ import java.util.List;
 @Service
 public class CatalogueService {
 
+    private CatalogueRepository catalogueRepository;
+
     private RestaurantService restaurantService;
 
-    public CatalogueService(RestaurantService restaurantService) {
+    public CatalogueService(CatalogueRepository catalogueRepository, RestaurantService restaurantService) {
+        this.catalogueRepository = catalogueRepository;
         this.restaurantService = restaurantService;
     }
 
-    public List<Catalogue> catalogues(String restId) {
-        return restaurantService.restaurant(restId).getCatalogues();
+    public List<Catalogue> catalogues(String restaurantId) {
+        return catalogueRepository.findByRestaurantId(restaurantId);
     }
 
-    public void add(String restaurantId, Catalogue catalogue) {
-        Restaurant restaurant = restaurantService.restaurant(restaurantId).addCatalogue(catalogue);
-        restaurantService.save(restaurant);
+    public Catalogue save(Catalogue catalogue) {
+        return catalogueRepository.save(catalogue);
     }
 
-    public Catalogue catalogue(String restId, String catId) {
-        return restaurantService.restaurant(restId)
-                .catalogue(catId)
-                .orElseThrow(() -> new RuntimeException("catalogue not foud found " + catId));
+    public Catalogue catalogue(String id) {
+        return catalogueRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("no catalogue foud  " + id));
     }
 
-
-    public Catalogue current(String restaurantId) {
-        return restaurantService.restaurant(restaurantId).currentCatalogue()
-                .orElseThrow(() -> new RuntimeException("current catalogue not foud found for restaurant " + restaurantId));
-
+    public void delete(String id) {
+        catalogueRepository.deleteById(id);
     }
 
-    public void activate(String restId, String catId) {
-        Restaurant restaurant = restaurantService.restaurant(restId).activateCatalogue(catId);
-        restaurantService.save(restaurant);
-    }
-
-    public void desactivateCurrent(String restId) {
+    public Catalogue current(String restId) {
         Restaurant restaurant = restaurantService.restaurant(restId);
-        restaurant.desactivateCurrentCatalogue();
-        restaurantService.save(restaurant);
+        if (restaurant.hasCurrentCatalogue()) {
+            return catalogue(restaurant.getCurrentCatalogue());
+        }
+        throw new RuntimeException("no current catalogue found for this restaurant : " + restId);
     }
-
-    public Catalogue update(String restId, Catalogue catalogue) {
-        Restaurant restaurant = restaurantService.restaurant(restId);
-        restaurant.override(catalogue);
-        restaurantService.save(restaurant);
-        return catalogue;
-    }
-
-    public void delete(String restId, String catId) {
-        Restaurant restaurant = restaurantService.restaurant(restId);
-        restaurant.deleteCatalogue(catId);
-        restaurantService.save(restaurant);
-    }
-
 }
