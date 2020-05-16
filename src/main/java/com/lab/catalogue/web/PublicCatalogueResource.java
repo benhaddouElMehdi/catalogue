@@ -16,6 +16,7 @@ public class PublicCatalogueResource {
 
     @GetMapping("/restaurant/{restId}/catalogue/current")
     public Catalogue current(@PathVariable String restId) {
-        return catalogueService.current(restId);
+        return catalogueService.current(restId)
+                .orElseThrow(() -> new RuntimeException("no current found for restaurant : " + restId));
     }
 }

@@ -14,8 +14,6 @@ public class Restaurant {
 
     private Address address;
 
-    private String currentCatalogue;
-
     private String image;
 
     public String getId() {
@@ -52,18 +50,6 @@ public class Restaurant {
 
     public Restaurant() {
         id = UUID.randomUUID().toString();
-    }
-
-    public String getCurrentCatalogue() {
-        return currentCatalogue;
-    }
-
-    public void setCurrentCatalogue(String currentCatalogue) {
-        this.currentCatalogue = currentCatalogue;
-    }
-
-    public boolean hasCurrentCatalogue() {
-        return currentCatalogue != null;
     }
 
 }

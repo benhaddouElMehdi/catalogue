@@ -17,9 +17,14 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
+    public Restaurant update(Restaurant restaurant) {
+        restaurant(restaurant.getId());
+        return save(restaurant);
+    }
+
     public Restaurant restaurant(String id) {
         return restaurantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("catalogue not found for this restaurant : " + id));
+                .orElseThrow(() -> new RuntimeException("restaurant not found  : " + id));
     }
 
 }

@@ -31,7 +31,7 @@ public class AdminCatalogueResource {
 
     @PutMapping("/catalogue")
     public void updateCatalogue(@RequestBody Catalogue catalogue) {
-        service.save(catalogue);
+        service.update(catalogue);
     }
 
     @GetMapping("/{restId}/catalogue")
