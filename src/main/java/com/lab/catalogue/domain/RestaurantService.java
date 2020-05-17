@@ -1,9 +1,7 @@
 package com.lab.catalogue.domain;
 
 import com.lab.catalogue.repository.RestaurantRepository;
-import org.springframework.stereotype.Service;
 
-@Service
 public class RestaurantService {
 
     private RestaurantRepository restaurantRepository;
@@ -26,5 +24,4 @@ public class RestaurantService {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("restaurant not found  : " + id));
     }
-
 }

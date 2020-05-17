@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/v1/restaurant")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminRestaurantResource {
 
     @Autowired
@@ -29,6 +30,7 @@ public class AdminRestaurantResource {
     }
 
     @PutMapping
+    @ResponseStatus(code = HttpStatus.OK)
     public Restaurant update(@RequestBody Restaurant restaurant) {
         return restaurantService.update(restaurant);
     }

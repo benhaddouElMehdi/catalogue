@@ -1,30 +1,25 @@
 package com.lab.catalogue.domain;
 
 import com.lab.catalogue.repository.CatalogueRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class CatalogueService {
 
     private CatalogueRepository catalogueRepository;
 
-    private RestaurantService restaurantService;
-
-    public CatalogueService(CatalogueRepository catalogueRepository, RestaurantService restaurantService) {
+    public CatalogueService(CatalogueRepository catalogueRepository) {
         this.catalogueRepository = catalogueRepository;
-        this.restaurantService = restaurantService;
     }
 
-    public List<Catalogue> catalogues(String restaurantId) {
+    public List<Catalogue> cataloguesByRestaurantId(String restaurantId) {
         return catalogueRepository.findByRestaurantId(restaurantId);
     }
 
     public Catalogue save(Catalogue catalogue) {
         if (catalogue.isCurrent()) {
-            changeCurrentIfExists(catalogue);
+            deactivateCurrentIfExists(catalogue);
         }
         return catalogueRepository.save(catalogue);
     }
@@ -34,28 +29,27 @@ public class CatalogueService {
         return save(catalogue);
     }
 
-    private void changeCurrentIfExists(Catalogue catalogue) {
-        Optional<Catalogue> current = current(catalogue.getRestaurantId());
-        if (current.isPresent()) {
-            changeCurrent(current);
-        }
-    }
-
-    private void changeCurrent(Optional<Catalogue> current) {
-        current.get().setCurrent(false);
-        catalogueRepository.save(current.get());
-    }
-
     public Catalogue catalogue(String id) {
         return catalogueRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("no catalogue foud : " + id));
+                .orElseThrow(() -> new RuntimeException("no catalogue found : " + id));
     }
 
     public void delete(String id) {
+        catalogue(id);
         catalogueRepository.deleteById(id);
     }
 
     public Optional<Catalogue> current(String restId) {
         return catalogueRepository.findByRestaurantIdAndCurrent(restId, true);
+    }
+
+    private void deactivateCurrentIfExists(Catalogue catalogue) {
+        Optional<Catalogue> current = current(catalogue.getRestaurantId());
+        current.ifPresent(this::deactivateCurrent);
+    }
+
+    private void deactivateCurrent(Catalogue current) {
+        current.setCurrent(false);
+        catalogueRepository.save(current);
     }
 }
