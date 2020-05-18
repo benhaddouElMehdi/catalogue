@@ -1,6 +1,5 @@
 package com.lab.catalogue.web;
 
-import com.lab.catalogue.domain.CatalogueService;
 import com.lab.catalogue.domain.Restaurant;
 import com.lab.catalogue.domain.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ public class AdminRestaurantResource {
 
     @Autowired
     private RestaurantService restaurantService;
-
-    @Autowired
-    private CatalogueService catalogueService;
 
     @GetMapping("/version")
     public String version() {
@@ -33,6 +29,11 @@ public class AdminRestaurantResource {
     @ResponseStatus(code = HttpStatus.OK)
     public Restaurant update(@RequestBody Restaurant restaurant) {
         return restaurantService.update(restaurant);
+    }
+
+    @GetMapping("/{id}")
+    public Restaurant restaurant(@PathVariable String id) {
+        return restaurantService.restaurant(id);
     }
 
 

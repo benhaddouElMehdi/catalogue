@@ -16,9 +16,9 @@ public class AdminCatalogueResource {
     @Autowired
     private CatalogueService service;
 
-    @GetMapping("/catalogue/{catId}")
-    public List<Catalogue> catalogue(@PathVariable String restId) {
-        return service.cataloguesByRestaurantId(restId);
+    @GetMapping("/catalogue/{id}")
+    public Catalogue catalogue(@PathVariable String id) {
+        return service.catalogue(id);
     }
 
     @PostMapping("/catalogue")
@@ -27,10 +27,10 @@ public class AdminCatalogueResource {
         return service.save(catalogue);
     }
 
-    @DeleteMapping("/catalogue/{catId}")
+    @DeleteMapping("/catalogue/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteCatalogue(@PathVariable String catId) {
-        service.delete(catId);
+    public void deleteCatalogue(@PathVariable String id) {
+        service.delete(id);
     }
 
     @PutMapping("/catalogue")
@@ -39,8 +39,8 @@ public class AdminCatalogueResource {
         return service.update(catalogue);
     }
 
-    @GetMapping("/{restId}/catalogue")
-    public List<Catalogue> catalogues(@PathVariable String restId) {
+    @GetMapping("/restaurant/{restId}/catalogue")
+    public List<Catalogue> cataloguesByRestaurant(@PathVariable String restId) {
         return service.cataloguesByRestaurantId(restId);
     }
 
